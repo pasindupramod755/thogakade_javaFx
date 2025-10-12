@@ -3,6 +3,7 @@ package contraller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
@@ -24,6 +25,9 @@ public class loginFormContraller {
     @FXML
     void btnLoginAction(ActionEvent event) {
         if (txtUserName.getText().equals("p") && txtPassword.getText().equals("1")){
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+
             try {
                 stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/customer.fxml"))));
             } catch (IOException e) {
