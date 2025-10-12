@@ -25,7 +25,7 @@ public class loginFormContraller {
     void btnLoginAction(ActionEvent event) {
         if (txtUserName.getText().equals("p") && txtPassword.getText().equals("1")){
             try {
-                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/dashBoard.fxml"))));
+                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/customer.fxml"))));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

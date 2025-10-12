@@ -11,35 +11,35 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="568.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="contraller.DashBoardContraller">
+<AnchorPane prefHeight="568.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="contraller.CustomerContraller">
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#264869" height="568.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="233.0" />
-        <Button layoutX="20.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnHomeAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0; -fx-border-color: #00000;" text="Home">
+        <Button layoutX="20.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnHomeAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0;" text="Home">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button layoutX="19.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnCustomerAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #000000; -fx-background-radius: 0; -fx-border-color: #00000;" text="Customer" textFill="WHITE">
+        <Button layoutX="19.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnCustomerAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #000000; -fx-background-radius: 0;" text="Customer" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button layoutX="19.0" layoutY="249.0" mnemonicParsing="false" onAction="#btnItemAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0; -fx-border-color: #00000;" text="Item">
+        <Button layoutX="19.0" layoutY="249.0" mnemonicParsing="false" onAction="#btnItemAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0;" text="Item">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button layoutX="19.0" layoutY="311.0" mnemonicParsing="false" onAction="#btnSupplierAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0; -fx-border-color: #00000;" text="Supplier">
+        <Button layoutX="19.0" layoutY="311.0" mnemonicParsing="false" onAction="#btnSupplierAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0;" text="Supplier">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button layoutX="19.0" layoutY="375.0" mnemonicParsing="false" onAction="#btnEmployeeAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0; -fx-border-color: #00000;" text="Employee">
+        <Button layoutX="19.0" layoutY="375.0" mnemonicParsing="false" onAction="#btnEmployeeAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0;" text="Employee">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button layoutX="19.0" layoutY="437.0" mnemonicParsing="false" onAction="#btnLogOutAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #eb1717; -fx-background-radius: 0; -fx-border-color: #00000;" text="Log Out">
+        <Button layoutX="19.0" layoutY="437.0" mnemonicParsing="false" onAction="#btnLogOutAction" prefHeight="40.0" prefWidth="194.0" style="-fx-background-color: #eb1717; -fx-background-radius: 0;" text="Log Out">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
