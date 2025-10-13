@@ -107,6 +107,6 @@
         </Button>
       <DatePicker fx:id="txtJoinDate" layoutX="274.0" layoutY="450.0" prefHeight="26.0" prefWidth="194.0" />
       <Label layoutX="274.0" layoutY="431.0" prefHeight="18.0" prefWidth="120.0" text="Joined Date" />
-      <TextField fx:id="txtId1" layoutX="274.0" layoutY="344.0" prefHeight="26.0" prefWidth="194.0" />
+      <TextField fx:id="txtNIC" layoutX="274.0" layoutY="344.0" prefHeight="26.0" prefWidth="194.0" />
     </children>
 </AnchorPane>

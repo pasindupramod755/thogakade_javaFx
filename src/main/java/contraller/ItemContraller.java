@@ -107,7 +107,15 @@ public class ItemContraller implements Initializable {
 
     @FXML
     void btnHomeAction(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
 
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/home.fxml"))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        stage.show();
     }
 
     @FXML

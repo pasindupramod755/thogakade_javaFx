@@ -29,7 +29,7 @@ public class loginFormContraller {
             stage.close();
 
             try {
-                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/customer.fxml"))));
+                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/home.fxml"))));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -38,7 +38,7 @@ public class loginFormContraller {
         }else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Error");
-            alert.setHeaderText(null); // Optional: can leave header empty
+            alert.setHeaderText(null);
             alert.setContentText("Username or password is incorrect.");
             alert.showAndWait();
         }

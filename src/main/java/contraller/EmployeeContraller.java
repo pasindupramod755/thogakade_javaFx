@@ -18,6 +18,7 @@ import model.dto.EmployeeDTO;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class EmployeeContraller implements Initializable {
@@ -73,7 +74,7 @@ public class EmployeeContraller implements Initializable {
     private TextField txtId;
 
     @FXML
-    private TextField txtId1;
+    private TextField txtNIC;
 
     @FXML
     private DatePicker txtJoinDate;
@@ -95,6 +96,19 @@ public class EmployeeContraller implements Initializable {
 
     @FXML
     void btnAddAction(ActionEvent event) {
+        String id = txtId.getText();
+        String name = txtName.getText();
+        String nic = txtNIC.getText();
+        String dob = txtDate.getValue().toString();
+        String position = txtPosition.getText();
+        double salary = Double.parseDouble(txtSalary.getText());
+        String contactNumber = txtPhone.getText();
+        String address = txtAddress.getText();
+        String joinedDate = txtJoinDate.getValue().toString();
+        String status = txtStatus.getText();
+
+        EmployeeDTO newEmployee = new EmployeeDTO(id, name, nic, dob, position, salary, contactNumber, address, joinedDate, status);
+        employeeList.add(newEmployee);
 
     }
 
@@ -113,17 +127,24 @@ public class EmployeeContraller implements Initializable {
 
     @FXML
     void btnDeleteAction(ActionEvent event) {
-
+        employeeList.remove(tblEmployee.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     void btnEmployeeAction(ActionEvent event) {
-
     }
 
     @FXML
     void btnHomeAction(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
 
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/home.fxml"))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        stage.show();
     }
 
     @FXML
@@ -154,7 +175,16 @@ public class EmployeeContraller implements Initializable {
 
     @FXML
     void btnResetAction(ActionEvent event) {
-
+        txtId.clear();
+        txtName.clear();
+        txtNIC.clear();
+        txtDate.setValue(null);
+        txtPosition.clear();
+        txtSalary.clear();
+        txtPhone.clear();
+        txtAddress.clear();
+        txtJoinDate.setValue(null);
+        txtStatus.clear();
     }
 
     @FXML
@@ -172,7 +202,21 @@ public class EmployeeContraller implements Initializable {
 
     @FXML
     void btnUpdateAction(ActionEvent event) {
+        EmployeeDTO dto = tblEmployee.getSelectionModel().getSelectedItem();
 
+        if (dto != null) {
+            dto.setId(txtId.getText());
+            dto.setName(txtName.getText());
+            dto.setNic(txtNIC.getText());
+            dto.setDob(txtDate.getValue().toString());
+            dto.setPosition(txtPosition.getText());
+            dto.setSalary(Double.parseDouble(txtSalary.getText()));
+            dto.setContactNumber(txtPhone.getText());
+            dto.setAddress(txtAddress.getText());
+            dto.setJoinedDate(txtJoinDate.getValue().toString());
+            dto.setStatus(txtStatus.getText());
+            tblEmployee.refresh();
+        }
     }
 
     @Override
@@ -189,5 +233,18 @@ public class EmployeeContraller implements Initializable {
         colJoinDarte.setCellValueFactory(new PropertyValueFactory<>("joinedDate"));
 
         tblEmployee.setItems(employeeList);
+
+        tblEmployee.getSelectionModel().selectedItemProperty().addListener((observable,oldValue,newValue)->{
+            txtId.setText(newValue.getId());
+            txtName.setText(newValue.getName());
+            txtNIC.setText(newValue.getNic());
+            txtDate.setValue(LocalDate.parse(newValue.getDob()));
+            txtPosition.setText(newValue.getPosition());
+            txtSalary.setText(String.valueOf(newValue.getSalary()));
+            txtPhone.setText(newValue.getContactNumber());
+            txtAddress.setText(newValue.getAddress());
+            txtJoinDate.setValue(LocalDate.parse(newValue.getJoinedDate()));
+            txtStatus.setText(newValue.getStatus());
+        });
     }
 }

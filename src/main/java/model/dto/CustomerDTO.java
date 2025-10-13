@@ -19,4 +19,8 @@ public class CustomerDTO {
     private String postalCode;
 
 
+
+
+
+
 }
