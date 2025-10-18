@@ -15,6 +15,25 @@ import java.io.IOException;
 public class loginFormContraller {
 
     Stage stage = new Stage();
+    String[] usernameArray = {"pasindu","tharindu","lahiru","navindu"};
+    String[] passwordArray = {"12345","23456","34567","45678"};
+
+
+    public int searchIndex(String[] stringArray , String user){
+        int count = 0;
+        for(String username : stringArray){
+            if(username.equals(user)){
+                return count;
+            }
+            count++;
+        }
+        return -1;
+    }
+
+    public boolean log(String user,String pass){
+
+        return true;
+    }
 
     @FXML
     private PasswordField txtPassword;
@@ -24,7 +43,8 @@ public class loginFormContraller {
 
     @FXML
     void btnLoginAction(ActionEvent event) {
-        if (txtUserName.getText().equals("p") && txtPassword.getText().equals("1")){
+
+        if (searchIndex(usernameArray,txtUserName.getText()) >= 0 && passwordArray[searchIndex(usernameArray,txtUserName.getText())].equals(txtPassword.getText())){
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
 
