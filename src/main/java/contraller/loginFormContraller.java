@@ -64,4 +64,8 @@ public class loginFormContraller {
         }
     }
 
+     @FXML
+     void btnpasswordAction(ActionEvent actionEvent) {
+        btnLoginAction(actionEvent);
+    }
 }
