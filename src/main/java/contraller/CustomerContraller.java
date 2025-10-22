@@ -19,19 +19,20 @@ import model.dto.CustomerDTO;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class CustomerContraller implements Initializable {
 
-    ObservableList<CustomerDTO> customerObservable = FXCollections.observableArrayList(
-            new CustomerDTO("C001", "Mr.", "Danapala", "1981-02-06", 40000.0, "No.20 Walana", "Panadura", "Western", "12500"),
-            new CustomerDTO("C002", "Mrs.", "Perera", "1975-11-23", 55000.0, "No.12 Lake Road", "Kandy", "Central", "20000"),
-            new CustomerDTO("C003", "Miss", "Fernando", "1990-07-15", 32000.0, "No.33 Hill Street", "Galle", "Southern", "80000"),
-            new CustomerDTO("C004", "Mr.", "Wijesuriya", "1985-03-30", 47000.0, "No.5 Temple Lane", "Kurunegala", "North Western", "60000"),
-            new CustomerDTO("C005", "Mrs.", "Jayasinghe", "1993-09-12", 39000.0, "No.18 Green Avenue", "Colombo", "Western", "10000")
-    );
+    ObservableList<CustomerDTO> customerObservable = FXCollections.observableArrayList();
+//            new CustomerDTO("C001", "Mr.", "Danapala", "1981-02-06", 40000.0, "No.20 Walana", "Panadura", "Western", "12500"),
+//            new CustomerDTO("C002", "Mrs.", "Perera", "1975-11-23", 55000.0, "No.12 Lake Road", "Kandy", "Central", "20000"),
+//            new CustomerDTO("C003", "Miss", "Fernando", "1990-07-15", 32000.0, "No.33 Hill Street", "Galle", "Southern", "80000"),
+//            new CustomerDTO("C004", "Mr.", "Wijesuriya", "1985-03-30", 47000.0, "No.5 Temple Lane", "Kurunegala", "North Western", "60000"),
+//            new CustomerDTO("C005", "Mrs.", "Jayasinghe", "1993-09-12", 39000.0, "No.18 Green Avenue", "Colombo", "Western", "10000")
+//    );
 
     Stage stage = new Stage();
 
@@ -219,6 +220,29 @@ public class CustomerContraller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         txtTitle.getItems().addAll(titleArray);
+
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Customer");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                customerObservable.add(new CustomerDTO(
+                        resultSet.getString("customer_id"),
+                        resultSet.getString("title"),
+                        resultSet.getString("name"),
+                        resultSet.getString("dob"),
+                        resultSet.getDouble("salary"),
+                        resultSet.getString("address"),
+                        resultSet.getString("city"),
+                        resultSet.getString("province"),
+                        resultSet.getString("postal_code")
+                ));
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
