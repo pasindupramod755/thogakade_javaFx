@@ -18,18 +18,13 @@ import model.dto.EmployeeDTO;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class EmployeeContraller implements Initializable {
 
-    ObservableList<EmployeeDTO> employeeList = FXCollections.observableArrayList(
-            new EmployeeDTO("E001", "Sunil Perera", "832451230V", "1983-07-12", "Manager", 75000.0, "0712456789", "No.15 Temple Road, Kalutara", "2018-05-10", "Active"),
-            new EmployeeDTO("E002", "Nimali Fernando", "925431789V", "1992-03-22", "Accountant", 58000.0, "0771234567", "No.23 Lake View, Kandy", "2019-01-15", "Active"),
-            new EmployeeDTO("E003", "Ruwan Silva", "883215478V", "1988-11-03", "Sales Executive", 45000.0, "0719876543", "No.88 Hill Street, Galle", "2020-08-20", "Active"),
-            new EmployeeDTO("E004", "Ishara Jayasuriya", "943215987V", "1994-06-30", "HR Officer", 50000.0, "0703456789", "No.45 Garden Road, Colombo", "2021-03-01", "Inactive"),
-            new EmployeeDTO("E005", "Kamal Rajapaksha", "801234569V", "1980-12-10", "Driver", 40000.0, "0754321987", "No.12 Main Street, Matara", "2017-09-18", "Active")
-    );
+    ObservableList<EmployeeDTO> employeeList = FXCollections.observableArrayList();
 
     @FXML
     private TableColumn<?, ?> colAddress;
@@ -221,6 +216,32 @@ public class EmployeeContraller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employee");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                employeeList.add(new EmployeeDTO(
+                        resultSet.getString("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("nic"),
+                        resultSet.getString("dob"),
+                        resultSet.getString("position"),
+                        resultSet.getDouble("salary"),
+                        resultSet.getString("contact_number"),
+                        resultSet.getString("address"),
+                        resultSet.getString("joined_date"),
+                        resultSet.getString("status")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colNIC.setCellValueFactory(new PropertyValueFactory<>("nic"));

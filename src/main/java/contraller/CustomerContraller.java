@@ -27,12 +27,6 @@ import java.util.ResourceBundle;
 public class CustomerContraller implements Initializable {
 
     ObservableList<CustomerDTO> customerObservable = FXCollections.observableArrayList();
-//            new CustomerDTO("C001", "Mr.", "Danapala", "1981-02-06", 40000.0, "No.20 Walana", "Panadura", "Western", "12500"),
-//            new CustomerDTO("C002", "Mrs.", "Perera", "1975-11-23", 55000.0, "No.12 Lake Road", "Kandy", "Central", "20000"),
-//            new CustomerDTO("C003", "Miss", "Fernando", "1990-07-15", 32000.0, "No.33 Hill Street", "Galle", "Southern", "80000"),
-//            new CustomerDTO("C004", "Mr.", "Wijesuriya", "1985-03-30", 47000.0, "No.5 Temple Lane", "Kurunegala", "North Western", "60000"),
-//            new CustomerDTO("C005", "Mrs.", "Jayasinghe", "1993-09-12", 39000.0, "No.18 Green Avenue", "Colombo", "Western", "10000")
-//    );
 
     Stage stage = new Stage();
 
