@@ -8,10 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.dto.EmployeeDTO;
@@ -102,8 +99,34 @@ public class EmployeeContraller implements Initializable {
         String joinedDate = txtJoinDate.getValue().toString();
         String status = txtStatus.getText();
 
+
         EmployeeDTO newEmployee = new EmployeeDTO(id, name, nic, dob, position, salary, contactNumber, address, joinedDate, status);
-        employeeList.add(newEmployee);
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Employee (id, name, nic, dob, position, salary, contact_number, address, joined_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            preparedStatement.setString(1,id);
+            preparedStatement.setString(2,name);
+            preparedStatement.setString(3,nic);
+            preparedStatement.setString(4,dob);
+            preparedStatement.setString(5,position);
+            preparedStatement.setDouble(6,salary);
+            preparedStatement.setString(7,contactNumber);
+            preparedStatement.setString(8,address);
+            preparedStatement.setString(9,joinedDate);
+            preparedStatement.setString(10,status);
+            int i = preparedStatement.executeUpdate();
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "employee Added successfully!").show();
+
+            }else {
+                new Alert(Alert.AlertType.WARNING, "employee not found!").show();
+            }
+
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.WARNING, e.getMessage()).show();
+            throw new RuntimeException(e);
+        }
+
 
     }
 
@@ -122,7 +145,21 @@ public class EmployeeContraller implements Initializable {
 
     @FXML
     void btnDeleteAction(ActionEvent event) {
-        employeeList.remove(tblEmployee.getSelectionModel().getSelectedItem());
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM employee WHERE id = ?");
+            preparedStatement.setString(1,txtId.getText());
+            int i = preparedStatement.executeUpdate();
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "employee Deleted successfully!").show();
+            }else {
+                new Alert(Alert.AlertType.WARNING, "employee not found!").show();
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -240,7 +277,6 @@ public class EmployeeContraller implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));

@@ -8,11 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.dto.CustomerDTO;
@@ -111,6 +107,22 @@ public class CustomerContraller implements Initializable {
 
     @FXML
     void btnDeleteAction(ActionEvent event) {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Customer WHERE customer_id = ?");
+            preparedStatement.setString(1,txtId.getText());
+            int i = preparedStatement.executeUpdate();
+
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "Customer Deleted successfully!").show();
+            }else {
+                new Alert(Alert.AlertType.WARNING, "Customer not found!").show();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         customerObservable.remove(tblCustomer.getSelectionModel().getSelectedItem());
     }
 
@@ -197,7 +209,7 @@ public class CustomerContraller implements Initializable {
     void btnUpdateAction(ActionEvent event) {
         CustomerDTO dto = tblCustomer.getSelectionModel().getSelectedItem();
 
-        dto.setId(txtId.getText());
+//        dto.setId(txtId.getText());
         dto.setTitle(txtTitle.getValue());
         dto.setName(txtName.getText());
         dto.setDob(String.valueOf(txtDate.getValue()));
@@ -206,6 +218,31 @@ public class CustomerContraller implements Initializable {
         dto.setProvince(txtProvince.getText());
         dto.setSalary(Double.valueOf(txtSalary.getText()));
         dto.setPostalCode(txtpostalCode.getText());
+
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            String sql = "UPDATE Customer SET title=?, name=?, dob=?, salary=?, address=?, city=?, province=?, postal_code=? WHERE customer_id=?";
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            pstm.setString(1, txtTitle.getValue());
+            pstm.setString(2, txtName.getText());
+            pstm.setString(3, String.valueOf(txtDate.getValue()));
+            pstm.setString(4, txtSalary.getText());
+            pstm.setString(5, txtAddress.getText());
+            pstm.setString(6, txtCity.getText());
+            pstm.setString(7, txtProvince.getText());
+            pstm.setString(8, txtpostalCode.getText());
+            pstm.setString(9, txtId.getText());
+
+            int i = pstm.executeUpdate();
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "Customer updated successfully!").show();
+            }else {
+                new Alert(Alert.AlertType.WARNING, "Customer not found!").show();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         tblCustomer.refresh();
     }
