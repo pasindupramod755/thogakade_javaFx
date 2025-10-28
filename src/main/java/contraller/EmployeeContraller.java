@@ -100,7 +100,6 @@ public class EmployeeContraller implements Initializable {
         String status = txtStatus.getText();
 
 
-        EmployeeDTO newEmployee = new EmployeeDTO(id, name, nic, dob, position, salary, contactNumber, address, joinedDate, status);
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Employee (id, name, nic, dob, position, salary, contact_number, address, joined_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -117,6 +116,8 @@ public class EmployeeContraller implements Initializable {
             int i = preparedStatement.executeUpdate();
             if (i>0){
                 new Alert(Alert.AlertType.INFORMATION, "employee Added successfully!").show();
+                employeeList.add(new EmployeeDTO(id, name, nic, dob, position, salary, contactNumber, address, joinedDate, status));
+                tblEmployee.refresh();
 
             }else {
                 new Alert(Alert.AlertType.WARNING, "employee not found!").show();

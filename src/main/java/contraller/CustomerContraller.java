@@ -97,7 +97,33 @@ public class CustomerContraller implements Initializable {
         String postalCode = txtpostalCode.getText();
         String address = txtAddress.getText();
 
-        customerObservable.add(new CustomerDTO(id,title,name,dob,salary,address,city,province,postalCode));
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Customer VALUES (?,?,?,?,?,?,?,?,?)");
+            preparedStatement.setString(1,id);
+            preparedStatement.setString(2,title);
+            preparedStatement.setString(3,name);
+            preparedStatement.setString(4,dob);
+            preparedStatement.setDouble(5,salary);
+            preparedStatement.setString(6,address);
+            preparedStatement.setString(7,city);
+            preparedStatement.setString(8,province);
+            preparedStatement.setString(9,postalCode);
+            int i = preparedStatement.executeUpdate();
+
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "Customer Added successfully!").show();
+                customerObservable.add(new CustomerDTO(id,title,name,dob,salary,address,city,province,postalCode));
+                tblCustomer.refresh();
+
+            }else {
+                new Alert(Alert.AlertType.WARNING, "Customer not found!").show();
+            }
+
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.WARNING, e.getMessage()).show();
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -115,6 +141,8 @@ public class CustomerContraller implements Initializable {
 
             if (i>0){
                 new Alert(Alert.AlertType.INFORMATION, "Customer Deleted successfully!").show();
+                customerObservable.remove(tblCustomer.getSelectionModel().getSelectedItem());
+                tblCustomer.refresh();
             }else {
                 new Alert(Alert.AlertType.WARNING, "Customer not found!").show();
             }
@@ -122,8 +150,6 @@ public class CustomerContraller implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        customerObservable.remove(tblCustomer.getSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -209,16 +235,6 @@ public class CustomerContraller implements Initializable {
     void btnUpdateAction(ActionEvent event) {
         CustomerDTO dto = tblCustomer.getSelectionModel().getSelectedItem();
 
-//        dto.setId(txtId.getText());
-        dto.setTitle(txtTitle.getValue());
-        dto.setName(txtName.getText());
-        dto.setDob(String.valueOf(txtDate.getValue()));
-        dto.setCity(txtCity.getText());
-        dto.setAddress(txtAddress.getText());
-        dto.setProvince(txtProvince.getText());
-        dto.setSalary(Double.valueOf(txtSalary.getText()));
-        dto.setPostalCode(txtpostalCode.getText());
-
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
             String sql = "UPDATE Customer SET title=?, name=?, dob=?, salary=?, address=?, city=?, province=?, postal_code=? WHERE customer_id=?";
@@ -232,10 +248,19 @@ public class CustomerContraller implements Initializable {
             pstm.setString(7, txtProvince.getText());
             pstm.setString(8, txtpostalCode.getText());
             pstm.setString(9, txtId.getText());
-
             int i = pstm.executeUpdate();
+
             if (i>0){
                 new Alert(Alert.AlertType.INFORMATION, "Customer updated successfully!").show();
+                dto.setId(txtId.getText());
+                dto.setTitle(txtTitle.getValue());
+                dto.setName(txtName.getText());
+                dto.setDob(String.valueOf(txtDate.getValue()));
+                dto.setCity(txtCity.getText());
+                dto.setAddress(txtAddress.getText());
+                dto.setProvince(txtProvince.getText());
+                dto.setSalary(Double.valueOf(txtSalary.getText()));
+                dto.setPostalCode(txtpostalCode.getText());
             }else {
                 new Alert(Alert.AlertType.WARNING, "Customer not found!").show();
             }
