@@ -15,14 +15,14 @@ import java.io.IOException;
 public class loginFormContraller {
 
     Stage stage = new Stage();
-    String[] usernameArray = {"pasindu","tharindu","lahiru","navindu"};
-    String[] passwordArray = {"12345","23456","34567","45678"};
+    String[] usernameArray = {"pasindu", "tharindu", "lahiru", "navindu"};
+    String[] passwordArray = {"12345", "23456", "34567", "45678"};
 
 
-    public int searchIndex(String[] stringArray , String user){
+    public int searchIndex(String[] stringArray, String user) {
         int count = 0;
-        for(String username : stringArray){
-            if(username.equals(user)){
+        for (String username : stringArray) {
+            if (username.equals(user)) {
                 return count;
             }
             count++;
@@ -30,7 +30,7 @@ public class loginFormContraller {
         return -1;
     }
 
-    public boolean log(String user,String pass){
+    public boolean log(String user, String pass) {
 
         return true;
     }
@@ -44,7 +44,7 @@ public class loginFormContraller {
     @FXML
     void btnLoginAction(ActionEvent event) {
 
-        if (searchIndex(usernameArray,txtUserName.getText()) >= 0 && passwordArray[searchIndex(usernameArray,txtUserName.getText())].equals(txtPassword.getText())){
+        if (searchIndex(usernameArray, txtUserName.getText()) >= 0 && passwordArray[searchIndex(usernameArray, txtUserName.getText())].equals(txtPassword.getText())) {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
 
@@ -55,7 +55,7 @@ public class loginFormContraller {
             }
             stage.show();
 
-        }else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Error");
             alert.setHeaderText(null);
@@ -64,8 +64,18 @@ public class loginFormContraller {
         }
     }
 
-     @FXML
-     void btnpasswordAction(ActionEvent actionEvent) {
-        btnLoginAction(actionEvent);
+    @FXML
+    void btnpasswordAction(ActionEvent actionEvent) {
+        if (txtPassword.getText().equals("")) {
+            txtUserName.requestFocus();
+        } else {
+            btnLoginAction(actionEvent);
+        }
+    }
+
+
+    @FXML
+    void btnuserName(ActionEvent event) {
+        txtPassword.requestFocus();
     }
 }

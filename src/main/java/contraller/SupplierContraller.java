@@ -82,6 +82,7 @@ public class SupplierContraller implements Initializable {
     @FXML
     private TextField txtpostalCode;
 
+    //Add Function
     @FXML
     void btnAddAction(ActionEvent event) {
 
@@ -96,23 +97,23 @@ public class SupplierContraller implements Initializable {
         String email = txtEmail.getText();
 
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "1234");
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO supplier VALUES (?,?,?,?,?,?,?,?,?)");
-            preparedStatement.setString(1,id);
-            preparedStatement.setString(2,name);
-            preparedStatement.setString(3,companyName);
-            preparedStatement.setString(4,address);
-            preparedStatement.setString(5,city);
-            preparedStatement.setString(6,province);
-            preparedStatement.setString(7,postalCode);
-            preparedStatement.setString(8,phone);
-            preparedStatement.setString(9,email);
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, companyName);
+            preparedStatement.setString(4, address);
+            preparedStatement.setString(5, city);
+            preparedStatement.setString(6, province);
+            preparedStatement.setString(7, postalCode);
+            preparedStatement.setString(8, phone);
+            preparedStatement.setString(9, email);
             int i = preparedStatement.executeUpdate();
-            if (i>0){
+            if (i > 0) {
                 new Alert(Alert.AlertType.INFORMATION, "Supplier Added successfully!").show();
                 supplierList.add(new SupplierDTO(id, name, companyName, address, city, province, postalCode, phone, email));
                 tblSupplier.refresh();
-            }else {
+            } else {
                 new Alert(Alert.AlertType.WARNING, "Supplier not found!").show();
             }
 
