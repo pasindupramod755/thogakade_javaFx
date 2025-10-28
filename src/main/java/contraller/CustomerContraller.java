@@ -266,6 +266,7 @@ public class CustomerContraller implements Initializable {
             }
 
         } catch (SQLException e) {
+            new Alert(Alert.AlertType.WARNING, e.getMessage()).show();
             throw new RuntimeException(e);
         }
 

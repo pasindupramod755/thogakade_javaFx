@@ -237,18 +237,39 @@ public class EmployeeContraller implements Initializable {
     void btnUpdateAction(ActionEvent event) {
         EmployeeDTO dto = tblEmployee.getSelectionModel().getSelectedItem();
 
-        if (dto != null) {
-            dto.setId(txtId.getText());
-            dto.setName(txtName.getText());
-            dto.setNic(txtNIC.getText());
-            dto.setDob(txtDate.getValue().toString());
-            dto.setPosition(txtPosition.getText());
-            dto.setSalary(Double.parseDouble(txtSalary.getText()));
-            dto.setContactNumber(txtPhone.getText());
-            dto.setAddress(txtAddress.getText());
-            dto.setJoinedDate(txtJoinDate.getValue().toString());
-            dto.setStatus(txtStatus.getText());
-            tblEmployee.refresh();
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE employee SET name=?, nic=?, dob=?, position=?, salary=?, contact_number=?, address=?, joined_date=?, status=? WHERE id=?");
+            preparedStatement.setString(1,txtName.getText());
+            preparedStatement.setString(2,txtNIC.getText());
+            preparedStatement.setString(3, String.valueOf(txtDate.getValue()));
+            preparedStatement.setString(4,txtPosition.getText());
+            preparedStatement.setDouble(5, Double.parseDouble(txtSalary.getText()));
+            preparedStatement.setString(6,txtPhone.getText());
+            preparedStatement.setString(7,txtAddress.getText());
+            preparedStatement.setString(8, String.valueOf(txtJoinDate.getValue()));
+            preparedStatement.setString(9,txtStatus.getText());
+            preparedStatement.setString(10,txtId.getText());
+            int i = preparedStatement.executeUpdate();
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "Emplpoyee updated successfully!").show();
+                dto.setId(txtId.getText());
+                dto.setName(txtName.getText());
+                dto.setNic(txtNIC.getText());
+                dto.setDob(txtDate.getValue().toString());
+                dto.setPosition(txtPosition.getText());
+                dto.setSalary(Double.parseDouble(txtSalary.getText()));
+                dto.setContactNumber(txtPhone.getText());
+                dto.setAddress(txtAddress.getText());
+                dto.setJoinedDate(txtJoinDate.getValue().toString());
+                dto.setStatus(txtStatus.getText());
+                tblEmployee.refresh();
+            }else {
+                new Alert(Alert.AlertType.WARNING, "Emplpoyee not found!").show();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

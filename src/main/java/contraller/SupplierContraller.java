@@ -8,26 +8,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.dto.CustomerDTO;
 import model.dto.SupplierDTO;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 public class SupplierContraller implements Initializable {
 
-    ObservableList<SupplierDTO> supplierList = FXCollections.observableArrayList(
-            new SupplierDTO("S001", "Fernando", "Agro Foods Pvt Ltd", "No.45 Main Street", "Matara", "Southern", "81000", "0712345678", "agrofoods@gmail.com"),
-            new SupplierDTO("S002", "Perera", "Green Leaf Organics", "No.12 Lake Road", "Kandy", "Central", "20000", "0723456789", "greenleaf@gmail.com"),
-            new SupplierDTO("S003", "Silva", "Oceanic Exports Ltd", "No.88 Beach Side", "Galle", "Southern", "80000", "0771234567", "oceanicexports@gmail.com"),
-            new SupplierDTO("S004", "Kumara", "Sunshine Traders", "No.23 Hill Street", "Nuwara Eliya", "Central", "22200", "0789876543", "sunshine@gmail.com"),
-            new SupplierDTO("S005", "Wijesinghe", "Coconut House", "No.67 Palm Avenue", "Kurunegala", "North Western", "60000", "0708765432", "coconuthouse@gmail.com")
-    );
+    ObservableList<SupplierDTO> supplierList = FXCollections.observableArrayList();
     @FXML
     private TableColumn<?, ?> colAddress;
 
@@ -87,6 +84,7 @@ public class SupplierContraller implements Initializable {
 
     @FXML
     void btnAddAction(ActionEvent event) {
+
         String id = txtId.getText();
         String name = txtName.getText();
         String companyName = txtCompanyName.getText();
@@ -97,7 +95,31 @@ public class SupplierContraller implements Initializable {
         String phone = txtPhone.getText();
         String email = txtEmail.getText();
 
-        supplierList.add(new SupplierDTO(id, name, companyName, address, city, province, postalCode, phone, email));
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO supplier VALUES (?,?,?,?,?,?,?,?,?)");
+            preparedStatement.setString(1,id);
+            preparedStatement.setString(2,name);
+            preparedStatement.setString(3,companyName);
+            preparedStatement.setString(4,address);
+            preparedStatement.setString(5,city);
+            preparedStatement.setString(6,province);
+            preparedStatement.setString(7,postalCode);
+            preparedStatement.setString(8,phone);
+            preparedStatement.setString(9,email);
+            int i = preparedStatement.executeUpdate();
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "Supplier Added successfully!").show();
+                supplierList.add(new SupplierDTO(id, name, companyName, address, city, province, postalCode, phone, email));
+                tblSupplier.refresh();
+            }else {
+                new Alert(Alert.AlertType.WARNING, "Supplier not found!").show();
+            }
+
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.WARNING, e.getMessage()).show();
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -115,7 +137,22 @@ public class SupplierContraller implements Initializable {
 
     @FXML
     void btnDeleteAction(ActionEvent event) {
-        supplierList.remove(tblSupplier.getSelectionModel().getSelectedItem());
+
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM supplier WHERE supplier_id = ?");
+            preparedStatement.setString(1,txtId.getText());
+            int i = preparedStatement.executeUpdate();
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "Supplier Deleted successfully!").show();
+                supplierList.remove(tblSupplier.getSelectionModel().getSelectedItem());
+            }else {
+                new Alert(Alert.AlertType.WARNING, "Supplier not found!").show();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -191,6 +228,31 @@ public class SupplierContraller implements Initializable {
     @FXML
     void btnUpdateAction(ActionEvent event) {
         SupplierDTO dto = tblSupplier.getSelectionModel().getSelectedItem();
+
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE supplier SET name=?, company_name=?, address=?, city=?, province=?, postal_code=?, phone=?, email=? WHERE supplier_id=?");
+            preparedStatement.setString(1,txtName.getText());
+            preparedStatement.setString(2,txtCompanyName.getText());
+            preparedStatement.setString(3,txtAddress.getText());
+            preparedStatement.setString(4,txtCity.getText());
+            preparedStatement.setString(5,txtProvince.getText());
+            preparedStatement.setString(6,txtpostalCode.getText());
+            preparedStatement.setString(7,txtPhone.getText());
+            preparedStatement.setString(8,txtEmail.getText());
+            preparedStatement.setString(9,txtId.getText());
+            int i = preparedStatement.executeUpdate();
+            if (i>0){
+                new Alert(Alert.AlertType.INFORMATION, "Supplier Update successfully!").show();
+
+            }else {
+                new Alert(Alert.AlertType.WARNING, "Supplier not found!").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.WARNING, e.getMessage()).show();
+            throw new RuntimeException(e);
+        }
+
         if (dto != null) {
             dto.setId(txtId.getText());
             dto.setName(txtName.getText());
@@ -201,13 +263,33 @@ public class SupplierContraller implements Initializable {
             dto.setPostalCode(txtpostalCode.getText());
             dto.setPhone(txtPhone.getText());
             dto.setEmail(txtEmail.getText());
-
             tblSupplier.refresh();
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","1234");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM supplier");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                supplierList.add(new SupplierDTO(
+                        resultSet.getString("supplier_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("company_name"),
+                        resultSet.getString("address"),
+                        resultSet.getString("city"),
+                        resultSet.getString("province"),
+                        resultSet.getString("postal_code"),
+                        resultSet.getString("phone"),
+                        resultSet.getString("email")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colCompanyName.setCellValueFactory(new PropertyValueFactory<>("companyName"));
